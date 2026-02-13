@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Shows students in a table. Each column = one field. -->
+    <record id="view_student_list" model="ir.ui.view">
+        <field name="name">student.management.list</field>
+        <field name="model">student.management</field>
+        <field name="arch" type="xml">
+            <list string="Students" decoration-muted="active==False">
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="date_enrolled"/>
+                <field name="active" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Shows one student with all fields when you click on a record. -->
+    <record id="view_student_form" model="ir.ui.view">
+        <field name="name">student.management.form</field>
+        <field name="model">student.management</field>
+        <field name="arch" type="xml">
+            <form string="Student">
+                <sheet>
+                    <group>
+                        <group string="Basic Info">
+                            <field name="name" placeholder="e.g. John Doe"/>
+                            <field name="email" placeholder="john@example.com"/>
+                            <field name="phone" placeholder="+1 234 567 8900"/>
+                            <field name="date_enrolled"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Notes">
+                            <field name="notes" nolabel="1" placeholder="Any notes..."/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action: what happens when you click "Students" (open list view) -->
+    <record id="action_student_list" model="ir.actions.act_window">
+        <field name="name">Students</field>
+        <field name="res_model">student.management</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first student!
+            </p>
+            <p>
+                Click the "New" button to add a student. Fill in the name and any other details.
+            </p>
+        </field>
+    </record>
+
+    <!-- Root menu: "Student Management" in the main Apps menu -->
+    <menuitem id="menu_student_root"
+              name="Student Management"
+              sequence="50"/>
+
+    <!-- Submenu: "Students" opens the list of students -->
+    <menuitem id="menu_student_list"
+              name="Students"
+              parent="menu_student_root"
+              action="action_student_list"
+              sequence="10"/>
+
+</odoo>
