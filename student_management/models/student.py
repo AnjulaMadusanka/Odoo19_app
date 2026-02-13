@@ -60,3 +60,20 @@ class Student(models.Model):
         if not student:
             return False
         return student.read(['id', 'name', 'email', 'phone', 'date_enrolled', 'notes', 'active'])[0]
+    
+    @api.model
+    def api_update_student(self, student_id, vals):
+        student = self.browse(student_id).exists()
+        if not student:
+            return False
+        student.write(vals)
+        return True
+
+    @api.model
+    def api_delete_student(self, student_id):
+        student = self.browse(student_id).exists()
+        if not student:
+            return False
+        student.unlink()
+        return True
+
