@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Shows students in a table. Each column = one field. -->
+    <!-- ========== Tree View (List View) ==========-->
     <record id="view_student_list" model="ir.ui.view">
-        <field name="name">student.management.list</field>
+        <field name="name">student.management.tree</field>
         <field name="model">student.management</field>
         <field name="arch" type="xml">
-            <list string="Students" decoration-muted="active==False">
+            <list string="Students" decoration-muted="active==False" default_order="name asc">
                 <field name="name"/>
                 <field name="email"/>
                 <field name="phone"/>
@@ -16,7 +16,7 @@
         </field>
     </record>
 
-    <!-- Shows one student with all fields when you click on a record. -->
+    <!-- ========== Form View ==========-->
     <record id="view_student_form" model="ir.ui.view">
         <field name="name">student.management.form</field>
         <field name="model">student.management</field>
@@ -40,11 +40,52 @@
         </field>
     </record>
 
-    <!-- Action: what happens when you click "Students" (open list view) -->
+    <!-- ========== Kanban View ==========-->
+    <record id="view_student_kanban" model="ir.ui.view">
+        <field name="name">student.management.kanban</field>
+        <field name="model">student.management</field>
+        <field name="arch" type="xml">
+            <kanban string="Students" default_group_by="date_enrolled">
+                <field name="name"/>
+                <field name="email"/>
+                <field name="date_enrolled"/>
+                <field name="active"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_record_title"><field name="name"/></div>
+                            <div class="o_kanban_record_subtitle"><field name="email"/></div>
+                            <div class="o_kanban_record_bottom">
+                                <field name="date_enrolled"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ========== Search View ==========-->
+    <record id="view_student_search" model="ir.ui.view">
+        <field name="name">student.management.search</field>
+        <field name="model">student.management</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Student Name"/>
+                <field name="email"/>
+                <filter name="filter_active" string="Active" domain="[('active', '=', True)]"/>
+                <filter name="filter_archived" string="Archived" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter name="filter_my_students" string="My Students" domain="[('create_uid', '=', uid)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action: opens Students with Tree, Kanban, and Form available -->
     <record id="action_student_list" model="ir.actions.act_window">
         <field name="name">Students</field>
         <field name="res_model">student.management</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,kanban,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first student!
@@ -68,3 +109,4 @@
               sequence="10"/>
 
 </odoo>
+
