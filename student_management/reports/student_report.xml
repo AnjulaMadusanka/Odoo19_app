@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <!-- ========== QWeb Report Templates ========== -->
+
+    <!-- Student Report: one page per student (name, email, phone, date enrolled, notes) -->
+    <template id="report_student_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Student Information</h2>
+                        <table class="table table-sm">
+                            <tr>
+                                <td><strong>Name</strong></td>
+                                <td><span t-field="doc.name"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Email</strong></td>
+                                <td><span t-field="doc.email"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Phone</strong></td>
+                                <td><span t-field="doc.phone"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Enrollment Date</strong></td>
+                                <td><span t-field="doc.date_enrolled"/></td>
+                            </tr>
+                            <tr t-if="doc.notes">
+                                <td><strong>Notes</strong></td>
+                                <td><span t-field="doc.notes"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- Student List: one table with all selected students -->
+    <template id="report_student_list_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2>Student List</h2>
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Enrollment Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs" t-as="doc">
+                                <tr>
+                                    <td><span t-field="doc.name"/></td>
+                                    <td><span t-field="doc.email"/></td>
+                                    <td> <span t-field="doc.phone"/></td>
+                                    <td><span t-field="doc.date_enrolled"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- Student Summary: total count + numbered table (name, email, enrollment date) -->
+    <template id="report_student_summary_document">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <h2>Student Summary</h2>
+                    <p class="mb-3">
+                        <strong>Total students: </strong><t t-esc="len(docs)"/>
+                    </p>
+                    <table class="table table-sm table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Enrollment Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs" t-as="doc">
+                                <tr>
+                                    <td><t t-esc="doc_index + 1"/></td>
+                                    <td><span t-field="doc.name"/></td>
+                                    <td><span t-field="doc.email"/></td>
+                                    <td><span t-field="doc.date_enrolled"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- ========== Report Actions (Print menu) ========== -->
+
+    <record id="action_report_student" model="ir.actions.report">
+        <field name="name">Student Report</field>
+        <field name="model">student.management</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">student_management.report_student_document</field>
+        <field name="print_report_name">'Student - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_student_management"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_student_list" model="ir.actions.report">
+        <field name="name">Student List</field>
+        <field name="model">student.management</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">student_management.report_student_list_document</field>
+        <field name="print_report_name">'Student List - %s' % (object.name if len(object) == 1 else '%d students' % len(object))</field>
+        <field name="binding_model_id" ref="model_student_management"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_student_summary" model="ir.actions.report">
+        <field name="name">Student Summary</field>
+        <field name="model">student.management</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">student_management.report_student_summary_document</field>
+        <field name="print_report_name">'Student Summary - %d students' % len(object)</field>
+        <field name="binding_model_id" ref="model_student_management"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>
+

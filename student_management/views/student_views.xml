@@ -16,12 +16,19 @@
         </field>
     </record>
 
-    <!-- ========== Form View ==========-->
+    <!-- ========== Form View (with Print Buttons) ==========-->
     <record id="view_student_form" model="ir.ui.view">
         <field name="name">student.management.form</field>
         <field name="model">student.management</field>
         <field name="arch" type="xml">
             <form string="Student">
+                <!-- Add header buttons for reports -->
+                <header>
+                    <button name="%(action_report_student)d"
+                            string="Print Report"
+                            type="action"
+                            class="btn-primary"/>
+                </header>
                 <sheet>
                     <group>
                         <group string="Basic Info">

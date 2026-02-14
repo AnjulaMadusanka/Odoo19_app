@@ -16,12 +16,14 @@
     'author': 'Anjula Wijekoon',
     'website': 'https://www.example.com',
     'license': 'LGPL-3',
-    'depends': ['base'],                     # We only need Odoo base (no other modules)
+    'depends': ['base','web'],  
     'data': [
-        'security/ir.model.access.csv',      # Who can read/write student data
-        'views/student_views.xml',           # List and form views + menu
+        'security/ir.model.access.csv', # Who can read/write student data  
+        'views/student_views.xml',      # List and form views + menu
+        'reports/students_report.xml'   #Students Reports
     ],
     'installable': True,
     'application': True,
     'auto_install': False,
 }
+
